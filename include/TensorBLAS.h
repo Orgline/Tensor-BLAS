@@ -27,6 +27,10 @@ void setInitialValue( long int m, long int n, float *a, long int lda, float val)
 __global__ 
 void copy_lower_to_upper(long int n, float *A, long int lda);
 
+void beginTimer();
+
+float endTimer();
+
 void startTimer();
 
 float stopTimer();

@@ -48,7 +48,7 @@ void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float*
             offset = 0;
         //printf("n = %ld, offset = %d\n", nn ,offset);   
 
-        if(n % 8192 ==0 )
+        if(nn % 8192 ==0 )
         {
             tc_syrk_p2(handle, nn, k, alpha, Ah+offset, lda, beta, C+offset+offset*ldc, ldc, nb);
         }

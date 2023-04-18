@@ -2,14 +2,14 @@
 #include <string>
 
 cudaEvent_t begin, end;
-void startTimer()
+void beginTimer()
 {
     cudaEventCreate(&begin);
     cudaEventRecord(begin);
     cudaEventCreate(&end);
 }
 
-float stopTimer()
+float endTimer()
 {
     
     cudaEventRecord(end);
@@ -21,8 +21,26 @@ float stopTimer()
     return milliseconds;
 }
 
-#include <cuda_runtime.h>
-#include <math.h>
+cudaEvent_t start, stop;
+void startTimer()
+{
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start);
+}
+
+float stopTimer()
+{
+    
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    float milliseconds;
+    cudaEventElapsedTime(&milliseconds, start, stop);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+    return milliseconds;
+}
+
 
 
 __global__ void frobenius_norm_kernel(int64_t m, int64_t n, float *A, int64_t lda, double *norm) {
