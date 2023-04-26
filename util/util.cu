@@ -105,7 +105,7 @@ void generateNormalMatrix(float *dA,long int m,long int n)
     curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_DEFAULT);
     int seed = rand()%3000;
 	curandSetPseudoRandomGeneratorSeed(gen, seed);
-    curandGenerateNormal(gen, dA, m*n,0, 1);
+    curandGenerateNormal(gen, dA, m*n, 0, 1);
 }
 
 void generateUniformMatrix(float *dA,long int m,long int n)

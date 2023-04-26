@@ -49,6 +49,8 @@ size_t free_mem();
 
 int64_t* find_mat_size_syrk(int64_t n, int *length);
 
+int64_t* find_mat_size_trsm(int64_t n, int *length);
+
 
 template<typename T>
 void printMatrixDeviceBlock(char *filename,int m, int n, T* dA, int lda)
@@ -81,6 +83,8 @@ void printMatrixDeviceBlock(char *filename,int m, int n, T* dA, int lda)
 void print_env();
 
 void tc_syrk(cublasHandle_t handle, long int n,long int k,  float alpha, float* A, long int lda, float beta, float* C, long int ldc, __half* Ah, long int nb);
+
+void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int lda, float* B, long int ldb, __half* hwork, long int nb);
 
 const float sone = 1.0;
 const float snegone = -1.0;
