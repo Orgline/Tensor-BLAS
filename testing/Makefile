@@ -3,7 +3,7 @@ CFLAGS=-O2 -arch sm_80 -I $(CUDA_PATH)/..\include/
 LFLAGS=-L $(CUDA_PATH)/lib64 -lcublas -lcublasLt -lcurand -lcudart -lcuda
 CC = gcc
 
-all: env syrk trsm trmm
+all: env syrk trsm trmm syr2k
 
 util.o: ../util/util.cu
 	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
@@ -52,5 +52,16 @@ testing_trmm.o: testing_trmm.cu
 tc_trmm.o: ../BLAS/tc_trmm.cu
 	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
 
+syr2k: testing_syr2k
+
+testing_syr2k: testing_syr2k.o tc_syr2k.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@
+
+testing_syr2k.o: testing_syr2k.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+
+tc_syr2k.o: ../BLAS/tc_syr2k.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+
 clean:
-	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm
+	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k

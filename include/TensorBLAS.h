@@ -88,6 +88,8 @@ void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int l
 
 void tc_trmm(cublasHandle_t handle, long int m, long int n, float alpha, float* A, long int lda, float* B, long int ldb, float* C, long int ldc, __half* hwork, long int nb);
 
+void tc_syr2k(cublasHandle_t handle, long int n, long int k, float alpha, float* A, long int lda, float* B, long int ldb, float beta, float* C, long int ldc, __half* Ah, long int nb);
+
 const float sone = 1.0;
 const float snegone = -1.0;
 const float szero = 0.0;
