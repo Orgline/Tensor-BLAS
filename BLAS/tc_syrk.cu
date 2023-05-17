@@ -34,9 +34,18 @@ void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float*
     int offset;
     int rest_n = n;
 
-    dim3 grid((n+31)/32, (k+31)/32);
-    dim3 block(32,32);
-    s2h<<<grid, block>>>(n, k, A, lda, Ah, lda);
+    // dim3 grid((n+31)/32, (k+31)/32);
+    // dim3 block(32,32);
+    // s2h<<<grid, block>>>(n, k, A, lda, Ah, lda);
+
+    constexpr auto block_size = 256;
+	constexpr auto smem_len = block_size * 16;
+	const auto grid_size = k;
+    s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
+					n, k,
+					A, lda,
+					Ah, lda
+					);
     for(int i = length; i>=0; i--)
     {
 

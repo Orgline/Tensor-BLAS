@@ -64,7 +64,7 @@ int main(int argc,char *argv[])
 
     setInitialValue<<<gridc, blockc>>>(n, n ,C, n, 1.0);
     __half *hwork;
-    cudaMalloc(&hwork, sizeof(__half)*n*k);
+    cudaMalloc(&hwork, sizeof(__half)*2*n*k);
     
     cublasGemmEx(cublas_handle, CUBLAS_OP_N, CUBLAS_OP_T, n, n, k,
                 &alpha, hwork, CUDA_R_16F, n, hwork, CUDA_R_16F, n,
@@ -78,7 +78,7 @@ int main(int argc,char *argv[])
     
 
     cublasGemmEx(cublas_handle, CUBLAS_OP_N, CUBLAS_OP_T, n, n, k,
-                &alpha, hwork, CUDA_R_16F, n, hwork, CUDA_R_16F, n,
+                &alpha, hwork, CUDA_R_16F, n, hwork+n*k, CUDA_R_16F, n,
                 &beta, C, CUDA_R_32F, n, CUDA_R_32F,
                 CUBLAS_GEMM_DEFAULT_TENSOR_OP);
     float ms = stopTimer();
