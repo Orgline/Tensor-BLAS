@@ -80,9 +80,9 @@ void printMatrixDeviceBlock(char *filename,int m, int n, T* dA, int lda)
     free(ha);
 }
 
-void print_env();
+extern "C" __attribute__((visibility("default"))) void print_env();
 
-void tc_syrk(cublasHandle_t handle, long int n,long int k,  float alpha, float* A, long int lda, float beta, float* C, long int ldc, __half* Ah, long int nb);
+extern "C" __attribute__((visibility("default"))) void tc_syrk(cublasHandle_t handle, long int n,long int k,  float alpha, float* A, long int lda, float beta, float* C, long int ldc, __half* Ah, long int nb);
 
 void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int lda, float* B, long int ldb, __half* hwork, long int nb);
 
