@@ -8,3 +8,9 @@ cd testing
 make
 ./testing_syrk 16384 16384 256 1 0 1
 ```
+
+```
+export CUDA_PATH=/mnt/nfs/packages/x86_64/cuda/cuda-11.2
+cd build
+make
+```
