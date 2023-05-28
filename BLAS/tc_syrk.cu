@@ -1,5 +1,34 @@
 #include "../include/TensorBLAS.h" 
 
+
+int tc_syrk_wrapper(long int n, long int k, float* A, float* C, long int nb)
+{
+    cublasHandle_t cublas_handle;
+    cublasCreate(&cublas_handle);
+
+    __half *hwork;
+    cudaMalloc(&hwork, sizeof(__half)*2*n*k);
+
+    float alpha = 1.0f;
+    float beta = 0.0f;
+    tc_syrk(cublas_handle, n, k, alpha, A, n, beta, C, n, hwork, nb);
+    
+    dim3 gridc((n+31)/32, (n+31)/32);
+    dim3 blockc(32,32);
+    copy_lower_to_upper<<<gridc, blockc>>>(n, C, n);
+
+    cudaFree(hwork);
+
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) 
+    {
+        printf("CUDA error: %s\n", cudaGetErrorString(err));
+        return 1;
+    }
+
+    return 0;
+}
+
 void tc_syrk_p2(cublasHandle_t handle, long int n, long int k, float alpha, __half* Ah, long int lda, float beta, float* C, long int ldc, long int nb)
 {
     //printf("tc_syrk_p2\n");
