@@ -87,8 +87,8 @@ void transpose(int m, int n, float* dA, float *tmpA){
 
     __syncthreads();
 
-    if (i<n && j<m) {
-        dA[j+i*m] = tmpA[i+j*n];
+    if (i<m && j<n) {
+        dA[j+i*n] = tmpA[i+j*m];
     }
 }
 
@@ -108,8 +108,8 @@ void s2hTranspose(long int m, long int n, float *as, __half *ah)
 {
 	long int i = threadIdx.x + blockDim.x * blockIdx.x;
 	long int j = threadIdx.y + blockDim.y * blockIdx.y;
-	if (i < n && j < m) {
-		ah[j + i*m] = __float2half(as[i + j*n]);
+	if (i < m && j < n) {
+		ah[j + i*n] = __float2half(as[i + j*m]);
 	}
 }
 

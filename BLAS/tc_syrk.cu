@@ -10,12 +10,17 @@ int tc_syrk_wrapper(long int n, long int k, float* A, float* C, long int nb)
     __half *hwork;
     cudaMalloc(&hwork, sizeof(__half)*n*k);
 
-    float alpha = 1.0f;
-    float beta = 0.0f;
+    float alpha = sone;
+    float beta = szero;
+
+    // float *tmp;
     // cudaMalloc(&tmp, sizeof(float)*n*k);
-    // dim3 grida((n+31)/32, (k+31)/32);
+    // dim3 grida((k+31)/32, (n+31)/32);
     // dim3 blocka(32,32);
-    // transpose<<<grida, blocka>>>(n, k , A, tmp);
+    // transpose<<<grida, blocka>>>(k, n ,A, tmp);
+    // printMatrixDeviceBlock("A.csv",n, k, A, n);
+    // cudaFree(tmp);
+
     tc_syrk(cublas_handle, n, k, alpha, A, n, beta, C, n, hwork, nb);
     dim3 gridc((n+31)/32, (n+31)/32);
     dim3 blockc(32,32);
@@ -75,9 +80,9 @@ void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float*
     }
     else
     {
-        dim3 grid((n+31)/32, (k+31)/32);
+        dim3 grid((k+31)/32, (n+31)/32);
         dim3 block(32,32);
-        s2hTranspose<<<grid, block>>>(n, k, A, Ah);
+        s2hTranspose<<<grid, block>>>(k, n, A, Ah);
     }
 
     for(int i = length; i>=0; i--)

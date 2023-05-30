@@ -6,9 +6,9 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 lib = ctypes.CDLL(os.path.join(dir_path, '../build/TensorBLAS.so'))
 
-n = 4
-k = 8
-nb = 1024
+n = 20000
+k = 40000
+nb = 256
 
 print_env = lib.print_env
 print_env()
@@ -30,8 +30,10 @@ ptr_C = ctypes.cast(C.data_ptr(), ctypes.POINTER(ctypes.c_float))
 status = lib.tc_syrk_wrapper(ctypes.c_long(n), ctypes.c_long(k), ptr_A, ptr_C, ctypes.c_long(nb))
 assert status == 0
 #print(A)
-
+#print(AA)
 #A = torch.tensor([[1.0, 2, 3], [4, 5, 6]]).cuda()
-print(A @ A.t()-C)
+#print(C)
+#print(AA @ AA.t())
+print(torch.linalg.norm(A @ A.t()-C)/torch.linalg.norm(C))
 
 
