@@ -1,18 +1,22 @@
 #include "../include/TensorBLAS.h" 
 
-
+bool syrk_python_flag = false;
 int tc_syrk_wrapper(long int n, long int k, float* A, float* C, long int nb)
 {
+    syrk_python_flag =true;
     cublasHandle_t cublas_handle;
     cublasCreate(&cublas_handle);
 
     __half *hwork;
-    cudaMalloc(&hwork, sizeof(__half)*2*n*k);
+    cudaMalloc(&hwork, sizeof(__half)*n*k);
 
     float alpha = 1.0f;
     float beta = 0.0f;
+    // cudaMalloc(&tmp, sizeof(float)*n*k);
+    // dim3 grida((n+31)/32, (k+31)/32);
+    // dim3 blocka(32,32);
+    // transpose<<<grida, blocka>>>(n, k , A, tmp);
     tc_syrk(cublas_handle, n, k, alpha, A, n, beta, C, n, hwork, nb);
-    
     dim3 gridc((n+31)/32, (n+31)/32);
     dim3 blockc(32,32);
     copy_lower_to_upper<<<gridc, blockc>>>(n, C, n);
@@ -55,26 +59,27 @@ void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float*
     
     int length;
     int64_t* matSize = find_mat_size_syrk(n, &length);
-    // for(int i = 0; i<=length; i++)
-    // {
-    //     printf("%ld ", matSize[i]);
-    // }
-    // printf("\n");
     int offset;
     int rest_n = n;
 
-    // dim3 grid((n+31)/32, (k+31)/32);
-    // dim3 block(32,32);
-    // s2h<<<grid, block>>>(n, k, A, lda, Ah, lda);
-
-    constexpr auto block_size = 256;
-	constexpr auto smem_len = block_size * 16;
-	const auto grid_size = k;
-    s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
+    if(!syrk_python_flag)
+    {
+        constexpr auto block_size = 256;
+	    constexpr auto smem_len = block_size * 16;
+	    const auto grid_size = k;
+        s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
 					n, k,
 					A, lda,
 					Ah, lda
 					);
+    }
+    else
+    {
+        dim3 grid((n+31)/32, (k+31)/32);
+        dim3 block(32,32);
+        s2hTranspose<<<grid, block>>>(n, k, A, Ah);
+    }
+
     for(int i = length; i>=0; i--)
     {
 

@@ -76,6 +76,21 @@ float snorm(long int m, long int n, float *d_A, long int lda)
     return float(norm);
 }
 
+__global__
+void transpose(int m, int n, float* dA, float *tmpA){
+    int i = threadIdx.x + blockDim.x * blockIdx.x;
+    int j = threadIdx.y + blockDim.y * blockIdx.y;
+
+    if (i<m && j<n) {
+        tmpA[i+j*m] = dA[i+j*m];
+    }
+
+    __syncthreads();
+
+    if (i<n && j<m) {
+        dA[j+i*m] = tmpA[i+j*n];
+    }
+}
 
 
 __global__
@@ -85,6 +100,16 @@ void s2h(long int m, long int n, float *as, long int ldas, __half *ah, long int 
 	long int j = threadIdx.y + blockDim.y * blockIdx.y;
 	if (i < m && j < n) {
 		ah[i + j*ldah] = __float2half(as[i + j*ldas]);
+	}
+}
+
+__global__
+void s2hTranspose(long int m, long int n, float *as, __half *ah)
+{
+	long int i = threadIdx.x + blockDim.x * blockIdx.x;
+	long int j = threadIdx.y + blockDim.y * blockIdx.y;
+	if (i < n && j < m) {
+		ah[j + i*m] = __float2half(as[i + j*n]);
 	}
 }
 

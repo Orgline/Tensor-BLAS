@@ -13,6 +13,9 @@ __global__
 void s2h(long int m, long int n, float *as, long int ldas, __half *ah, long int ldah);
 
 __global__
+void s2hTranspose(long int m, long int n, float *as, __half *ah);
+
+__global__
 void clearTri(char uplo, long int m, long int n, float *a, long int lda);
 
 __global__
@@ -26,6 +29,9 @@ void setInitialValue( long int m, long int n, float *a, long int lda, float val)
 
 __global__ 
 void copy_lower_to_upper(long int n, float *A, long int lda);
+
+__global__
+void transpose(int m, int n, float* dA, float *tmpA);
 
 void beginTimer();
 
