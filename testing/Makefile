@@ -1,34 +1,47 @@
 CXX = nvcc
 CFLAGS=-O2 -arch sm_80 -I $(CUDA_PATH)/..\include/
 LFLAGS=-L $(CUDA_PATH)/lib64 -lcublas -lcublasLt -lcurand -lcudart -lcuda
+NVCCFLAGS=-I/home/z52527/cuMpSGEMM/include -L/home/z52527/cuMpSGEMM/build -lcumpsgemm
 CC = gcc
 
-all: env syrk trsm trmm syr2k gemm
-
+# all: env syrk trsm trmm syr2k gemm cumpsgemm_syrk
+all: cumpsgemm_syrk
 util.o: ../util/util.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 mat_size.o: ../util/mat_size.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 env: testing_env
 
 testing_env: testing_env.o util.o
-	$(CXX) $(LFLAGS) $^ -o $@
-
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
+ 
 testing_env.o: testing_env.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 syrk: testing_syrk
 
 testing_syrk: testing_syrk.o tc_syrk.o util.o mat_size.o
-	$(CXX) $(LFLAGS) $^ -o $@
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
 
 testing_syrk.o: testing_syrk.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 tc_syrk.o: ../BLAS/tc_syrk.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
+cumpsgemm_syrk: testing_cumpsgemm_syrk
+
+testing_cumpsgemm_syrk: testing_cumpsgemm_syrk.o tc_cumpsgemm_syrk.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
+
+testing_cumpsgemm_syrk.o: testing_cumpsgemm_syrk.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
+tc_cumpsgemm_syrk.o: ../BLAS/tc_cumpsgemm_syrk.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
 
 trsm: testing_trsm
 
