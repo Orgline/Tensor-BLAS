@@ -4,8 +4,8 @@ LFLAGS=-L $(CUDA_PATH)/lib64 -lcublas -lcublasLt -lcurand -lcudart -lcuda
 NVCCFLAGS=-I/home/z52527/cuMpSGEMM/include -L/home/z52527/cuMpSGEMM/build -lcumpsgemm
 CC = gcc
 
-# all: env syrk trsm trmm syr2k gemm cumpsgemm_syrk
-all: cumpsgemm_syrk
+all: env syrk trsm trmm syr2k gemm cumpsgemm_syrk cumpsgemm_syr2k cumpsgemm_trmm
+# all: cumpsgemm_trmm trmm
 util.o: ../util/util.cu
 	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
@@ -46,43 +46,65 @@ tc_cumpsgemm_syrk.o: ../BLAS/tc_cumpsgemm_syrk.cu
 trsm: testing_trsm
 
 testing_trsm: testing_trsm.o tc_trsm.o util.o mat_size.o
-	$(CXX) $(LFLAGS) $^ -o $@
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
 
 testing_trsm.o: testing_trsm.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 tc_trsm.o: ../BLAS/tc_trsm.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 trmm: testing_trmm
 
 testing_trmm: testing_trmm.o tc_trmm.o util.o mat_size.o
-	$(CXX) $(LFLAGS) $^ -o $@
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
 
 testing_trmm.o: testing_trmm.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 tc_trmm.o: ../BLAS/tc_trmm.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
+cumpsgemm_trmm: testing_cumpsgemm_trmm
+
+testing_cumpsgemm_trmm: testing_cumpsgemm_trmm.o tc_cumpsgemm_trmm.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
+
+testing_cumpsgemm_trmm.o: testing_cumpsgemm_trmm.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
+tc_cumpsgemm_trmm.o: ../BLAS/tc_cumpsgemm_trmm.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 syr2k: testing_syr2k
 
 testing_syr2k: testing_syr2k.o tc_syr2k.o util.o mat_size.o
-	$(CXX) $(LFLAGS) $^ -o $@
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
 
 testing_syr2k.o: testing_syr2k.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 tc_syr2k.o: ../BLAS/tc_syr2k.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
+cumpsgemm_syr2k: testing_cumpsgemm_syr2k
+
+testing_cumpsgemm_syr2k: testing_cumpsgemm_syr2k.o tc_cumpsgemm_syr2k.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
+
+testing_cumpsgemm_syr2k.o: testing_cumpsgemm_syr2k.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
+
+tc_cumpsgemm_syr2k.o: ../BLAS/tc_cumpsgemm_syr2k.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 gemm: testing_gemm
 
 testing_gemm: testing_gemm.o util.o
-	$(CXX) $(LFLAGS) $^ -o $@
+	$(CXX) $(LFLAGS) $^ -o $@ $(NVCCFLAGS)
 
 testing_gemm.o: testing_gemm.cu
-	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ $(NVCCFLAGS)
 
 clean:
-	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k testing_gemm
+	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k testing_gemm 
