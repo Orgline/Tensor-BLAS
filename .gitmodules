@@ -1,0 +1,3 @@
+[submodule "cuMpSGEMM"]
+	path = cuMpSGEMM
+	url = https://github.com/enp1s0/cuMpSGEMM
