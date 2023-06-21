@@ -12,6 +12,7 @@ int tc_trsm_wrapper(long int m, long int n, float* A, float* B, long int nb)
 
     tc_trsm(cublas_handle, m, n, A, n, B, m, hwork, nb);
 
+
     cudaFree(hwork);
 
     cudaError_t err = cudaGetLastError();

@@ -59,11 +59,12 @@ int main(int argc,char *argv[])
     tc_cumpsgemm_trsm(cublas_handle, cumpsgemm_handle, m, n, A, n, B, m, nb);
     float ms = stopTimer();
 
-    printf("rtrsm takes %f ms, flops is %f\n", ms, 1.0*m*n*n/ms/1e9);
+    printf("tc_cumpsgemm_trsm takes %f ms, flops is %f\n", ms, 1.0*m*n*n/ms/1e9);
 
     
     if(checkFlag)
     {
+        startTimer();
         cublasStrsm(cublas_handle,
                 CUBLAS_SIDE_RIGHT, CUBLAS_FILL_MODE_LOWER,
                 CUBLAS_OP_T, CUBLAS_DIAG_NON_UNIT,
@@ -71,6 +72,9 @@ int main(int argc,char *argv[])
                 A, n,
                 work, m
             );
+        float ms = stopTimer();
+        printf("strsm takes %f ms, flops is %f\n", ms, 1.0*m*n*n/ms/1e9);
+
         cublasSgeam(cublas_handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n,
                 &sone, B, m, &snegone, work, m,
                 work, m);

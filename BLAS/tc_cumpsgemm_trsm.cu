@@ -47,7 +47,7 @@ void tc_rtrsm_p2(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_handle, lo
         A+n/2, lda,
         &sone,
         B+n/2*ldb, ldb,
-        CUMPSGEMM_AUTO
+        CUMPSGEMM_FP16TCEC
         );
 
     tc_rtrsm_p2(handle, cumpsgemm_handle, m, n/2, A+n/2*lda+n/2, lda, B+n/2*ldb, ldb, nb);
@@ -116,7 +116,7 @@ void tc_cumpsgemm_trsm(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_hand
                     A+offset+nn, rest_n,
                     &sone,
                     B+(offset+nn)*ldb, ldb,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         
