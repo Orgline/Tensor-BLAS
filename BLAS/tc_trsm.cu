@@ -1,5 +1,30 @@
 #include "../include/TensorBLAS.h" 
 
+bool trsm_python_flag = false;
+int tc_trsm_wrapper(long int m, long int n, float* A, float* B, long int nb)
+{
+    trsm_python_flag =true;
+    cublasHandle_t cublas_handle;
+    cublasCreate(&cublas_handle);
+
+    __half *hwork;
+    cudaMalloc(&hwork, sizeof(__half)*(n/2*n/2+m/2*n));
+
+    tc_trsm(cublas_handle, m, n, A, n, B, m, hwork, nb);
+
+    cudaFree(hwork);
+
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess) 
+    {
+        printf("CUDA error: %s\n", cudaGetErrorString(err));
+        return 1;
+    }
+
+    return 0;
+}
+
+
 void tc_rtrsm_p2(cublasHandle_t handle, long int m, long int n, float* A, long int lda, float* B, long int ldb, __half* hwork, long int nb)
 {
     if(n <= nb)
