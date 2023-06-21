@@ -12,7 +12,7 @@ void tc_cumpsgemm_syrk_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, long
 				&beta,
 				C, ldc, nb+nb*lda,
 				n/nb,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
 
     for(int i = 1;n / nb / i / 2 >= 1; i*=2)
@@ -27,7 +27,7 @@ void tc_cumpsgemm_syrk_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, long
 				&beta,
 				C+i*nb, ldc, 2*(i*nb+i*nb*lda),
 				n/nb/i/2,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
     }
 }
@@ -63,7 +63,7 @@ void tc_cumpsgemm_syrk(cumpsgemm::handle_t cumpsgemm_handle, long int n, long in
                     A+offset, lda,
                     &beta,
                     C+offset+offset*ldc, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         if(i != 0)
@@ -79,7 +79,7 @@ void tc_cumpsgemm_syrk(cumpsgemm::handle_t cumpsgemm_handle, long int n, long in
                     A+offset, lda,
                     &beta,
                     C+offset+offset*ldc+nn, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         else
