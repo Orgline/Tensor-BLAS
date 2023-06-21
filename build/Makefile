@@ -1,10 +1,10 @@
 NVCC = nvcc
 
-NVCCFLAGS = -O2 -arch sm_80 -Xcompiler '-fPIC' -I $(CUDA_PATH)/..\include/
+NVCCFLAGS = -O2 -arch sm_80 -Xcompiler '-fPIC' -I $(CUDA_PATH)/..\include/ -I\../cuMpSGEMM/include/
 
 LDFLAGS = -shared
 
-LIBS = -L$(CUDA_PATH)/lib64 -lcublas -lcublasLt -lcurand -lcudart -lcuda
+LIBS = -L$(CUDA_PATH)/lib64 -L\../cuMpSGEMM/build/ -lcublas -lcublasLt -lcurand -lcudart -lcuda -lcumpsgemm
 
 SOURCES = $(wildcard ../BLAS/*.cu) $(wildcard ../util/*.cu)
 
