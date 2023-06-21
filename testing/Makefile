@@ -1,7 +1,8 @@
 CXX = nvcc
 CFLAGS=-O2 -arch sm_80 -I $(CUDA_PATH)/..\include/
+CFLAGS+=-I\../cuMpSGEMM/include/
 LFLAGS=-L $(CUDA_PATH)/lib64 -lcublas -lcublasLt -lcurand -lcudart -lcuda
-LFLAGS+=-I/home/z52527/cuMpSGEMM/include -L/home/z52527/cuMpSGEMM/build -lcumpsgemm
+LFLAGS+= -L\../cuMpSGEMM/build/ -lcumpsgemm
 CC = gcc
 
 all: env syrk trsm trmm syr2k gemm cumpsgemm_syrk cumpsgemm_syr2k cumpsgemm_trmm cumpsgemm_trsm
@@ -118,4 +119,4 @@ testing_gemm.o: testing_gemm.cu
 	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
 
 clean:
-	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k testing_gemm 
+	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k testing_gemm testing_cumpsgemm_syr2k testing_cumpsgemm_trsm testing_cumpsgemm_syrk testing_cumpsgemm_trmm
