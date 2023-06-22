@@ -2,6 +2,7 @@ import ctypes
 import os
 
 import torch
+import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -42,12 +43,13 @@ def test_tc_syrk(A):
 def tc_trsm(A, B, nb=256):
     # Solve AX = B, A is lower triangular
     # B will be overwritten with X
+    # Currently it solves XA^T=B, A is lower triangular
 
     # Get n, m from A
     n = A.size(0)
-    m = B.size(1)
+    m = B.size(0)
     A = torch.clone(A.T).contiguous()
-    B_inout = B.clone()
+    B_inout = torch.clone(B.T).contiguous()
 
     lib.tc_trsm_wrapper.argtypes = [
         ctypes.c_long,
@@ -60,16 +62,23 @@ def tc_trsm(A, B, nb=256):
     ptr_A = ctypes.cast(A.data_ptr(), ctypes.POINTER(ctypes.c_float))
     ptr_B = ctypes.cast(B_inout.data_ptr(), ctypes.POINTER(ctypes.c_float))
 
-    # Call tc_syrk_wrapper
+    # Call tc_trsm_wrapper
     status = lib.tc_trsm_wrapper(ctypes.c_long(m), ctypes.c_long(n), ptr_A, ptr_B, ctypes.c_long(nb))
     assert status == 0
-    return B_inout
+    return B_inout.T
 
 def test_tc_trsm(A, B):
+    
+    C_ref = torch.linalg.solve_triangular(A.T, B, upper=True, left=False)
+    #print(C_ref)
+    print(C_ref @ A.T-B)
+   
     C = tc_trsm(A, B)
-    print(C)
-    C_ref = torch.linalg.solve_triangular(A, B, upper=False)
-    print(C_ref)
+    CC = C @ A.T-B
+    print(CC)
+    # import numpy
+    # numpy.savetxt("X.csv", CC.T.cpu(), delimiter=',')
+    
     print(f"Error: {torch.linalg.norm(C_ref - C) / torch.linalg.norm(C_ref)}")
 
 
@@ -78,12 +87,17 @@ if __name__ == '__main__':
     # k = 40000
     # A = torch.randn(n, k, device='cuda', dtype=torch.float32)
     # test_tc_syrk(A)
-    n = 20000
-    m = 40000
+    # tmp=torch.randn(4, 2)
+    # print(tmp)
+    # tmpt = torch.clone(tmp.T).contiguous()
+    # print(tmpt)
+    # print(tmpt.reshape(4,2))
+    m = int(sys.argv[1])
+    n = int(sys.argv[2])
     A = torch.randn(n, n, device='cuda', dtype=torch.float32)
     A = A @ A.t() + torch.eye(n, device='cuda', dtype=torch.float32)
     A = A.tril()
-    B = torch.randn(n, m, device='cuda', dtype=torch.float32)
+    B = torch.randn(m, n, device='cuda', dtype=torch.float32)
     # A = torch.tensor([[1., 0.], [1., 1.]], device='cuda', dtype=torch.float32)
     # B = torch.tensor([[1., 2.], [4., 5.]], device='cuda', dtype=torch.float32)
     test_tc_trsm(A, B)
