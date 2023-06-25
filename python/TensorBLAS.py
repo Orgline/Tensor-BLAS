@@ -50,7 +50,7 @@ def tc_trsm(A, B, nb=256):
     m = B.size(0)
     A = torch.clone(A.T).contiguous()
     B_inout = torch.clone(B.T).contiguous()
-
+    # print('B_inout', B_inout)
     lib.tc_trsm_wrapper.argtypes = [
         ctypes.c_long,
         ctypes.c_long,
@@ -71,11 +71,13 @@ def test_tc_trsm(A, B):
     
     C_ref = torch.linalg.solve_triangular(A.T, B, upper=True, left=False)
     #print(C_ref)
-    print(C_ref @ A.T-B)
-   
+    # print(C_ref @ A.T-B)
+    # print('trsm B')
+    # print(B)
     C = tc_trsm(A, B)
-    CC = C @ A.T-B
-    print(CC)
+    # print(C)
+    # CC = C @ A.T-B
+    # print(CC)
     # import numpy
     # numpy.savetxt("X.csv", CC.T.cpu(), delimiter=',')
     
@@ -100,4 +102,7 @@ if __name__ == '__main__':
     B = torch.randn(m, n, device='cuda', dtype=torch.float32)
     # A = torch.tensor([[1., 0.], [1., 1.]], device='cuda', dtype=torch.float32)
     # B = torch.tensor([[1., 2.], [4., 5.]], device='cuda', dtype=torch.float32)
+    # print(A)
+    # print(B)
+    
     test_tc_trsm(A, B)

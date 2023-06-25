@@ -10,6 +10,8 @@ int tc_trsm_wrapper(long int m, long int n, float* A, float* B, long int nb)
     __half *hwork;
     cudaMalloc(&hwork, sizeof(__half)*(n/2*n/2+m/2*n));
 
+    //printMatrixDeviceBlock("BBBB.csv",m, n, B, m);
+
     tc_trsm(cublas_handle, m, n, A, n, B, m, hwork, nb);
 
 
@@ -62,6 +64,7 @@ void tc_rtrsm_p2(cublasHandle_t handle, long int m, long int n, float* A, long i
 
     tc_rtrsm_p2(handle, m, n/2, A+n/2*lda+n/2, lda, B+n/2*ldb, ldb, hwork, nb);
 }
+
  
 void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int lda, float* B, long int ldb, __half* hwork, long int nb)
 {
@@ -70,22 +73,36 @@ void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int l
     long int offset;
     long int rest_n = n;
 
-    
+    // printMatrixDeviceBlock("A.csv",n, n, A, lda);
+    // printMatrixDeviceBlock("B.csv",m, n, B, ldb);
 
     for(int i = length; i>=0; i--)
     {
+        // char filename[100];
+        // filename[1] = '\0';
+        // if(i == 2)
+        //     filename[0] = '0';
+        // else if(i == 1)
+        //     filename[0] = '1';
+        // else
+        //     filename[0] = '2';
         int64_t nn = matSize[i];
+        
         if(i < length)
             offset += matSize[i + 1];
         else
             offset = 0;
+        //printf("nn = %ld, length = %d, offset = %d\n", nn, length, offset);
         if(nn % 2048 == 0)
         {
             tc_rtrsm_p2(handle, m, nn, A+offset+offset*lda, lda, B+offset*ldb, ldb, hwork, nb);
         }
         else
         {
-            
+            // strcat(filename, "A.csv");
+            // printMatrixDeviceBlock(filename,nn, nn, A+offset+offset*lda, lda);
+            // strcat(filename, "B.csv");
+            // printMatrixDeviceBlock(filename,m, n, B, ldb);
             cublasStrsm(handle,
                 CUBLAS_SIDE_RIGHT, CUBLAS_FILL_MODE_LOWER,
                 CUBLAS_OP_T, CUBLAS_DIAG_NON_UNIT,
@@ -96,6 +113,7 @@ void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int l
             
         }
         
+
     
         if(i != 0)
         {
@@ -104,18 +122,27 @@ void tc_trsm(cublasHandle_t handle, long int m, long int n, float* A, long int l
             
             dim3 grid((rest_n+31)/32, (nn+31)/32);
             dim3 block(32,32);
-            s2h<<<grid, block>>>(rest_n, nn, A+offset+nn, lda, Ah, rest_n);
+            s2h<<<grid, block>>>(rest_n, nn, A+offset+nn+offset*lda, lda, Ah, rest_n);
             
             __half* Bh = hwork + nn*rest_n;
             dim3 grid1((m+31)/32, (nn+31)/32);
             dim3 block1(32,32);
             s2h<<<grid1, block1>>>(m, nn, B+offset*ldb, ldb, Bh, m);
-
+            // if(i == 1)
+            // {
+            //     printMatrixDeviceBlock("mulB.csv",m, nn, B+offset*ldb, ldb);
+            //     printMatrixDeviceBlock("mulA.csv",rest_n, nn, A+offset+nn+offset*lda, lda);
+            //     printMatrixDeviceBlock("mulC.csv",m, rest_n, B+(offset+nn)*ldb, ldb);
+            // }
             cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, m, rest_n, nn,
                         &snegone, Bh, CUDA_R_16F, m, Ah, CUDA_R_16F, rest_n,
                         &sone, B+(offset+nn)*ldb, CUDA_R_32F, ldb, CUDA_R_32F,
                         CUBLAS_GEMM_DEFAULT_TENSOR_OP
             );
+            // if(i == 1)
+            // {
+            //     printMatrixDeviceBlock("finalC.csv",m, rest_n, B+(offset+nn)*ldb, ldb);
+            // }
 
         }
         

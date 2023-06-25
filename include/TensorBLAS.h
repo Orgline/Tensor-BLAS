@@ -17,6 +17,9 @@ __global__
 void s2hTranspose(long int m, long int n, float *as, __half *ah);
 
 __global__
+void row2col(long int m, long int n, float *as, float *ad);
+
+__global__
 void clearTri(char uplo, long int m, long int n, float *a, long int lda);
 
 __global__

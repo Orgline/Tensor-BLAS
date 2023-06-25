@@ -113,6 +113,7 @@ void s2hTranspose(long int m, long int n, float *as, __half *ah)
 	}
 }
 
+
 __global__ 
 void copy_lower_to_upper(long int n, float *A, long int lda)
 {
