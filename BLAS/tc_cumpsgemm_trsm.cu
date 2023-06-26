@@ -112,8 +112,8 @@ void tc_cumpsgemm_trsm(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_hand
                     CUBLAS_OP_T,
                     m, rest_n, nn,
                     &snegone,
-                    B+offset*ldb, m,
-                    A+offset+nn, rest_n,
+                    B+offset*ldb, ldb,
+                    A+offset+nn+offset*lda, lda,
                     &sone,
                     B+(offset+nn)*ldb, ldb,
                     CUMPSGEMM_FP16TCEC
