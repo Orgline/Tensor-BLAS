@@ -56,7 +56,7 @@ void tc_cumpsgemm_syr2k_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
     }
 }
 
-void tc_cumpsgemm_syr2k(cumpsgemm::handle_t cumpsgemm_handle, long int n, long int k,  float alpha, float* A, long int lda, float* B, long int ldb, float beta, float* C, long int ldc, long int nb)
+void tc_cumpsgemm_syr2k_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, long int k,  float alpha, float* A, long int lda, float* B, long int ldb, float beta, float* C, long int ldc, long int nb)
 {
     
     int length;
@@ -138,4 +138,43 @@ void tc_cumpsgemm_syr2k(cumpsgemm::handle_t cumpsgemm_handle, long int n, long i
         
     }
     return;
+}
+void tc_cumpsgemm_syr2k(cumpsgemm::handle_t cumpsgemm_handle, long int n, long int k,  float alpha, float* A, long int lda, float* B, long int ldb, float beta, float* C, long int ldc, long int nb)
+{
+    if(n%2||k%2) {
+        float *A_, *C_, *B_;
+        long int N = n, K = k, lda_, ldb_, ldc_;
+        n += n%2;
+        k += k%2;
+        lda_ = lda + lda%2;
+        ldb_ = ldb + ldb%2;
+        ldc_ = ldc + ldc%2;
+        cudaMalloc(&A_, sizeof(float)*n*k);
+        cudaMalloc(&B_, sizeof(float)*n*k);
+        cudaMalloc(&C_, sizeof(float)*n*n);
+        printf("%ld, %ld\n", n, k);
+        dim3 grid((n+31)/32, (k+31)/32);
+        dim3 block(32,32);
+        setInitialValue<<<grid, block>>>(n, k ,A_, lda_, 0.0);
+        setInitialValue<<<grid, block>>>(n, k ,B_, ldb_, 0.0);
+        setInitialValue<<<grid, block>>>(n, n ,C_, ldc_, 1.0);
+
+        matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);//lda lda_
+        matrixCpy<<<grid, block>>>(N, K, B, ldb, B_, ldb_);//lda lda_
+        // printMatrixDeviceBlock("A.csv", M, M, A, lda);
+        // printMatrixDeviceBlock("A_.csv", m, m, A_, lda_);
+
+        tc_cumpsgemm_syr2k_p3(cumpsgemm_handle, n, k, alpha, A_, lda_, B_, ldb_, beta, C_, ldc_, nb);
+
+        matrixCpy<<<grid, block>>>(N, N, C_, ldc_, C, ldc);
+        // printMatrixDeviceBlock("C.csv", M, N, C, ldc);
+        // printMatrixDeviceBlock("C_.csv", m, n, C_, ldc_);
+        printf("check ok\n");
+        cudaFree(A_);
+        cudaFree(B_);
+        cudaFree(C_);
+    }
+    else {
+        tc_cumpsgemm_syr2k_p3(cumpsgemm_handle, n, k, alpha, A, lda, B, ldb, beta, C, ldc, nb);
+    }
 }

@@ -31,6 +31,9 @@ void setEye( long int m, long int n, float *a, long int lda);
 __global__
 void setInitialValue( long int m, long int n, float *a, long int lda, float val);
 
+__global__
+void matrixCpy(long int m, long int n, float *a, long int lda, float *b, long int ldb);
+
 __global__ 
 void copy_lower_to_upper(long int n, float *A, long int lda);
 

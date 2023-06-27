@@ -190,6 +190,20 @@ void setInitialValue( long int m, long int n, float *a, long int lda, float val)
                 a[i+j*lda] = val;
         }
 }
+/*
+     B = A 
+     if you want to put bigger A to small B, size should be B's size
+     if you want to put smaller A to bigger B, size should be A's size
+*/
+__global__
+void matrixCpy(long int m, long int n, float *a, long int lda, float *b, long int ldb)
+{
+        long int i = threadIdx.x + blockDim.x * blockIdx.x;
+        long int j = threadIdx.y + blockDim.y * blockIdx.y;
+        if (i < m && j < n) {
+                b[i+j*ldb] = a[i+j*lda];
+        }
+}
 
 __global__
 void clearTri(char uplo, long int m, long int n, float *a, long int lda)
