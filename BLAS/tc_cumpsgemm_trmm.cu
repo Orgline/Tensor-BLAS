@@ -108,16 +108,13 @@ void tc_cumpsgemm_trmm(cumpsgemm::handle_t cumpsgemm_handle, long int m, long in
         setInitialValue<<<grid, block>>>(m, n ,B_, ldb_, 0.0);
         setInitialValue<<<grid, block>>>(m, n ,C_, ldc_, 1.0);
 
-        matrixCpy<<<grid, block>>>(M, M, A, lda, A_, lda_);//lda lda_
-        matrixCpy<<<grid, block>>>(M, N, B, ldb, B_, ldb_);//lda lda_
-        // printMatrixDeviceBlock("A.csv", M, M, A, lda);
-        // printMatrixDeviceBlock("A_.csv", m, m, A_, lda_);
+        matrixCpy<<<grid, block>>>(M, M, A, lda, A_, lda_);
+        matrixCpy<<<grid, block>>>(M, N, B, ldb, B_, ldb_);
 
         tc_cumpsgemm_trmm_p3(cumpsgemm_handle, m, n, alpha, A_, lda_, B_, ldb_, C_, ldc_, nb);
 
         matrixCpy<<<grid, block>>>(M, N, C_, ldc_, C, ldc);
-        // printMatrixDeviceBlock("C.csv", M, N, C, ldc);
-        // printMatrixDeviceBlock("C_.csv", m, n, C_, ldc_);
+
         printf("check ok\n");
         cudaFree(A_);
         cudaFree(B_);

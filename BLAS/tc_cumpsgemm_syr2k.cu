@@ -159,16 +159,14 @@ void tc_cumpsgemm_syr2k(cumpsgemm::handle_t cumpsgemm_handle, long int n, long i
         setInitialValue<<<grid, block>>>(n, k ,B_, ldb_, 0.0);
         setInitialValue<<<grid, block>>>(n, n ,C_, ldc_, 1.0);
 
-        matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);//lda lda_
-        matrixCpy<<<grid, block>>>(N, K, B, ldb, B_, ldb_);//lda lda_
-        // printMatrixDeviceBlock("A.csv", M, M, A, lda);
-        // printMatrixDeviceBlock("A_.csv", m, m, A_, lda_);
+        matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);
+        matrixCpy<<<grid, block>>>(N, K, B, ldb, B_, ldb_);
+
 
         tc_cumpsgemm_syr2k_p3(cumpsgemm_handle, n, k, alpha, A_, lda_, B_, ldb_, beta, C_, ldc_, nb);
 
         matrixCpy<<<grid, block>>>(N, N, C_, ldc_, C, ldc);
-        // printMatrixDeviceBlock("C.csv", M, N, C, ldc);
-        // printMatrixDeviceBlock("C_.csv", m, n, C_, ldc_);
+
         printf("check ok\n");
         cudaFree(A_);
         cudaFree(B_);
