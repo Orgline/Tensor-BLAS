@@ -15,7 +15,7 @@ void tc_cumpsgemm_symm_p2(cumpsgemm::handle_t cumpsgemm_handle, long int m, long
             B, ldb,
             &beta,
             C, ldc,
-            CUMPSGEMM_AUTO
+            CUMPSGEMM_FP16TCEC
             );
 }
 void tc_cumpsgemm_symm(cumpsgemm::handle_t cumpsgemm_handle, long int m, long int n,  float alpha, float* A, long int lda, float* B, int ldb, float beta, float* C, long int ldc)

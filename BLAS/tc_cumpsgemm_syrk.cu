@@ -12,7 +12,7 @@ void tc_cumpsgemm_syrk_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, long
 				&beta,
 				C, ldc, nb+nb*lda,
 				n/nb,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
 
     for(int i = 1;n / nb / i / 2 >= 1; i*=2)
@@ -27,7 +27,7 @@ void tc_cumpsgemm_syrk_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, long
 				&beta,
 				C+i*nb, ldc, 2*(i*nb+i*nb*lda),
 				n/nb/i/2,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
     }
 }
@@ -61,7 +61,7 @@ void tc_cumpsgemm_syrk_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, long
                     A+offset, lda,
                     &beta,
                     C+offset+offset*ldc, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         if(i != 0)
@@ -77,7 +77,7 @@ void tc_cumpsgemm_syrk_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, long
                     A+offset, lda,
                     &beta,
                     C+offset+offset*ldc+nn, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         else
@@ -98,18 +98,18 @@ void tc_cumpsgemm_syrk(cumpsgemm::handle_t cumpsgemm_handle, long int n, long in
         ldc_ = ldc + ldc%2;
         cudaMalloc(&A_, sizeof(float)*n*k);
         cudaMalloc(&C_, sizeof(float)*n*n);
-        // printf("%ld, %ld\n", n, k);
+        printf("%ld, %ld\n", n, k);
         dim3 grid((k+31)/32, (n+31)/32);
         dim3 block(32,32);
         setInitialValue<<<grid, block>>>(n, n ,C_, ldc_, 1.0);
-        setInitialValue<<<grid, block>>>(n, n ,A_, lda_, 0.0);
+        setInitialValue<<<grid, block>>>(n, k ,A_, lda_, 0.0);
         matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);//lda lda_
-        // printMatrixDeviceBlock("A.csv", N, K, A, N);
-        // printMatrixDeviceBlock("A_.csv", n, k, A_, n);
+        // printMatrixDeviceBlock("A.csv", N, K, A, lda);
+        // printMatrixDeviceBlock("A_.csv", n, k, A_, lda_);
 
         tc_cumpsgemm_syrk_p3(cumpsgemm_handle, n, k, alpha, A_, lda_, beta, C_, ldc_, nb);
 
-        matrixCpy<<<grid, block>>>(N, K, C_, ldc_, C, ldc);
+        matrixCpy<<<grid, block>>>(N, N, C_, ldc_, C, ldc);
         // printMatrixDeviceBlock("C.csv", N, K, C, N);
         // printMatrixDeviceBlock("C_.csv", n, k, C_, n);
         printf("check ok\n");

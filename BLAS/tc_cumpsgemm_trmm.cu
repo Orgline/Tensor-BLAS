@@ -13,7 +13,7 @@ void tc_cumpsgemm_trmm_p2(cumpsgemm::handle_t cumpsgemm_handle, long int m, long
 				&beta,
 				C, ldc, nb,
 				m/nb,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
     for(long int i = 1; m / nb / i / 2 >= 1; i*=2)
     {
@@ -27,7 +27,7 @@ void tc_cumpsgemm_trmm_p2(cumpsgemm::handle_t cumpsgemm_handle, long int m, long
 				&sone,
 				C+i*nb, ldc, 2*i*nb,
 				m/nb/i/2,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
     }
 }
@@ -67,7 +67,7 @@ void tc_cumpsgemm_trmm_p3(cumpsgemm::handle_t cumpsgemm_handle, long int m, long
                     B+offset, ldb,
                     &beta,
                     C+offset, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         if(i != 0)
@@ -83,7 +83,7 @@ void tc_cumpsgemm_trmm_p3(cumpsgemm::handle_t cumpsgemm_handle, long int m, long
                     B+offset, ldb,
                     &beta,
                     C+offset+mm, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
     }

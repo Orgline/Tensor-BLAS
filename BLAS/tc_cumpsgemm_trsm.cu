@@ -1,6 +1,6 @@
 #include "../include/TensorBLAS.h" 
 
-void tc_rtrsm_p2(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_handle, long int m, long int n, float* A, long int lda, float* B, long int ldb, long int nb)
+void tc_cumpsgemm_trsm_p2(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_handle, long int m, long int n, float* A, long int lda, float* B, long int ldb, long int nb)
 {
     if(n <= nb)
     {
@@ -15,7 +15,7 @@ void tc_rtrsm_p2(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_handle, lo
         return;
     }
     
-    tc_rtrsm_p2(handle, cumpsgemm_handle, m, n/2, A, lda, B, ldb, nb);
+    tc_cumpsgemm_trsm_p2(handle, cumpsgemm_handle, m, n/2, A, lda, B, ldb, nb);
 
     // printMatrixDeviceBlock("B0.csv", m, n, B, ldb);
     // printMatrixDeviceBlock("B0mn.csv", m, n/2, B+n/2*ldb, ldb);
@@ -40,10 +40,10 @@ void tc_rtrsm_p2(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_handle, lo
         B+n/2*ldb, ldb,
         CUMPSGEMM_TF32TCEC
         );
-    printMatrixDeviceBlock("A2.csv", n, n, A, lda);
-    printMatrixDeviceBlock("B2.csv", m, n, B, ldb);
+    // printMatrixDeviceBlock("A2.csv", n, n, A, lda);
+    // printMatrixDeviceBlock("B2.csv", m, n, B, ldb);
 
-    tc_rtrsm_p2(handle, cumpsgemm_handle, m, n/2, A+n/2*lda+n/2, lda, B+n/2*ldb, ldb, nb);
+    tc_cumpsgemm_trsm_p2(handle, cumpsgemm_handle, m, n/2, A+n/2*lda+n/2, lda, B+n/2*ldb, ldb, nb);
 }
  
 void tc_cumpsgemm_trsm(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_handle,long int m, long int n, float* A, long int lda, float* B, long int ldb, long int nb)
@@ -62,9 +62,9 @@ void tc_cumpsgemm_trsm(cublasHandle_t handle, cumpsgemm::handle_t cumpsgemm_hand
             offset = 0;
         if(nn % 2 == 0)
         {
-            printf("now nn=%d i = %d check ok\n", nn, i);
-            tc_rtrsm_p2(handle, cumpsgemm_handle, m, nn, A+offset+offset*lda, lda, B+offset*ldb, ldb, nb);
-            printf("check ok\n");
+            // printf("now nn=%d i = %d check ok\n", nn, i);
+            tc_cumpsgemm_trsm_p2(handle, cumpsgemm_handle, m, nn, A+offset+offset*lda, lda, B+offset*ldb, ldb, nb);
+            // printf("check ok\n");
         }
         else
         {

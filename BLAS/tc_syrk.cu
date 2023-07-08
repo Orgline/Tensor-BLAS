@@ -59,7 +59,7 @@ void tc_syrk_p2(cublasHandle_t handle, long int n, long int k, float alpha, __ha
     }
 }
 
-void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float* A, long int lda, float beta, float* C, long int ldc, __half* Ah, long int nb)
+void tc_syrk_p3(cublasHandle_t handle, long int n, long int k,  float alpha, float* A, long int lda, float beta, float* C, long int ldc, __half* Ah, long int nb)
 {
     
     int length;
@@ -120,6 +120,37 @@ void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float*
         else
             return;
         
+    }
+    return;
+}
+void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float* A, long int lda, float beta, float* C, long int ldc, __half* Ah, long int nb)
+{
+    if(n%2||k%2) {
+        float *A_, *C_;
+        long int N = n, K = k, lda_, ldc_;
+        n += n%2;
+        k += k%2;
+        lda_ = lda + lda%2;
+        ldc_ = ldc + ldc%2;
+        cudaMalloc(&A_, sizeof(float)*n*k);
+        cudaMalloc(&C_, sizeof(float)*n*n);
+        // printf("%ld, %ld\n", n, k);
+        dim3 grid((k+31)/32, (n+31)/32);
+        dim3 block(32,32);
+        setInitialValue<<<grid, block>>>(n, n ,C_, ldc_, 1.0);
+        setInitialValue<<<grid, block>>>(n, k ,A_, lda_, 0.0);
+        matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);//lda lda_
+
+        tc_syrk_p3(handle, n, k, alpha, A_, lda_, beta, C_, ldc_, Ah, nb);
+
+        matrixCpy<<<grid, block>>>(N, N, C_, ldc_, C, ldc);
+
+        printf("check ok\n");
+        cudaFree(A_);
+        cudaFree(C_);
+    }
+    else {
+        tc_syrk_p3(handle, n, k, alpha, A, lda, beta, C, ldc, Ah, nb);
     }
     return;
 }

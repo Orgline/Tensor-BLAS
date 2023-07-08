@@ -12,7 +12,7 @@ void tc_cumpsgemm_syr2k_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
 				&beta,
 				C, ldc, nb+nb*lda,
 				n/nb,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
     cumpsgemm::gemm_stridedBatch<float>(
 				cumpsgemm_handle,
@@ -24,7 +24,7 @@ void tc_cumpsgemm_syr2k_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
 				&sone,
 				C, ldc, nb+nb*lda,
 				n/nb,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
 
     for(int i = 1;n / nb / i / 2 >= 1; i*=2)
@@ -39,7 +39,7 @@ void tc_cumpsgemm_syr2k_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
 				&beta,
 				C+i*nb, ldc, 2*(i*nb+i*nb*lda),
 				n/nb/i/2,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
         cumpsgemm::gemm_stridedBatch<float>(
 				cumpsgemm_handle,
@@ -51,7 +51,7 @@ void tc_cumpsgemm_syr2k_p2(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
 				&sone,
 				C+i*nb, ldc, 2*(i*nb+i*nb*lda),
 				n/nb/i/2,
-				CUMPSGEMM_AUTO
+				CUMPSGEMM_FP16TCEC
 				);
     }
 }
@@ -90,7 +90,7 @@ void tc_cumpsgemm_syr2k_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
                     B+offset, ldb,
                     &beta,
                     C+offset+offset*ldc, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
             cumpsgemm::gemm(
                     cumpsgemm_handle,
@@ -102,7 +102,7 @@ void tc_cumpsgemm_syr2k_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
                     A+offset, lda,
                     &sone,
                     C+offset+offset*ldc, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         if(i != 0)
@@ -118,7 +118,7 @@ void tc_cumpsgemm_syr2k_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
                     B+offset, ldb,
                     &beta,
                     C+offset+offset*ldc+nn, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
             cumpsgemm::gemm(
                     cumpsgemm_handle,
@@ -130,7 +130,7 @@ void tc_cumpsgemm_syr2k_p3(cumpsgemm::handle_t cumpsgemm_handle, long int n, lon
                     A+offset, lda,
                     &sone,
                     C+offset+offset*ldc+nn, ldc,
-                    CUMPSGEMM_AUTO
+                    CUMPSGEMM_FP16TCEC
                     );
         }
         else
