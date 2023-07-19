@@ -32,18 +32,20 @@ void tc_cumpsgemm_symm(cumpsgemm::handle_t cumpsgemm_handle, long int m, long in
         cudaMalloc(&B_, sizeof(float)*m*n);
         cudaMalloc(&C_, sizeof(float)*m*n);
         printf("%ld, %ld\n", m, n);
-        dim3 grid((m+31)/32, (n+31)/32);
+        dim3 grid1((m+31)/32, (m+31)/32);
         dim3 block(32,32);
-        setInitialValue<<<grid, block>>>(m, m ,A_, lda_, 0.0);
-        setInitialValue<<<grid, block>>>(m, n ,B_, ldb_, 0.0);
-        setInitialValue<<<grid, block>>>(m, n ,C_, ldc_, 1.0);
-
-        matrixCpy<<<grid, block>>>(M, M, A, lda, A_, lda_);
-        matrixCpy<<<grid, block>>>(M, N, B, ldb, B_, ldb_);
+        setInitialValue<<<grid1, block>>>(m, m ,A_, lda_, 0.0);
+        dim3 grid2((m+31)/32, (n+31)/32);
+        setInitialValue<<<grid2, block>>>(m, n ,B_, ldb_, 0.0);
+        setInitialValue<<<grid2, block>>>(m, n ,C_, ldc_, 1.0);
+        dim3 grid3((M+31)/32, (M+31)/32);
+        matrixCpy<<<grid3, block>>>(M, M, A, lda, A_, lda_);
+        dim3 grid4((M+31)/32, (N+31)/32);
+        matrixCpy<<<grid4, block>>>(M, N, B, ldb, B_, ldb_);
 
         tc_cumpsgemm_symm_p2(cumpsgemm_handle, m, n, alpha, A_, lda_, B_, ldb_, beta, C_, ldc_);
 
-        matrixCpy<<<grid, block>>>(M, N, C_, ldc_, C, ldc);
+        matrixCpy<<<grid4, block>>>(M, N, C_, ldc_, C, ldc);
         printf("check ok\n");
         cudaFree(A_);
         cudaFree(B_);

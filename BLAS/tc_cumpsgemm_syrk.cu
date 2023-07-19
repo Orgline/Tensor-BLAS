@@ -99,17 +99,19 @@ void tc_cumpsgemm_syrk(cumpsgemm::handle_t cumpsgemm_handle, long int n, long in
         cudaMalloc(&A_, sizeof(float)*n*k);
         cudaMalloc(&C_, sizeof(float)*n*n);
         printf("%ld, %ld\n", n, k);
-        dim3 grid((k+31)/32, (n+31)/32);
+        dim3 grid1((n+31)/32, (n+31)/32);
         dim3 block(32,32);
-        setInitialValue<<<grid, block>>>(n, n ,C_, ldc_, 1.0);
-        setInitialValue<<<grid, block>>>(n, k ,A_, lda_, 0.0);
-        matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);//lda lda_
+        setInitialValue<<<grid1, block>>>(n, n ,C_, ldc_, 1.0);
+        dim3 grid2((n+31)/32, (k+31)/32);
+        setInitialValue<<<grid2, block>>>(n, k ,A_, lda_, 0.0);
+        dim3 grid3((N+31)/32, (K+31)/32);
+        matrixCpy<<<grid3, block>>>(N, K, A, lda, A_, lda_);//lda lda_
         // printMatrixDeviceBlock("A.csv", N, K, A, lda);
         // printMatrixDeviceBlock("A_.csv", n, k, A_, lda_);
 
         tc_cumpsgemm_syrk_p3(cumpsgemm_handle, n, k, alpha, A_, lda_, beta, C_, ldc_, nb);
-
-        matrixCpy<<<grid, block>>>(N, N, C_, ldc_, C, ldc);
+        dim3 grid4((N+31)/32, (N+31)/32);
+        matrixCpy<<<grid4, block>>>(N, N, C_, ldc_, C, ldc);
         // printMatrixDeviceBlock("C.csv", N, K, C, N);
         // printMatrixDeviceBlock("C_.csv", n, k, C_, n);
         printf("check ok\n");

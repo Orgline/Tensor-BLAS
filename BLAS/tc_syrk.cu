@@ -135,15 +135,17 @@ void tc_syrk(cublasHandle_t handle, long int n, long int k,  float alpha, float*
         cudaMalloc(&A_, sizeof(float)*n*k);
         cudaMalloc(&C_, sizeof(float)*n*n);
         // printf("%ld, %ld\n", n, k);
-        dim3 grid((k+31)/32, (n+31)/32);
+        dim3 grid1((n+31)/32, (n+31)/32);
         dim3 block(32,32);
-        setInitialValue<<<grid, block>>>(n, n ,C_, ldc_, 1.0);
-        setInitialValue<<<grid, block>>>(n, k ,A_, lda_, 0.0);
-        matrixCpy<<<grid, block>>>(N, K, A, lda, A_, lda_);//lda lda_
+        setInitialValue<<<grid1, block>>>(n, n ,C_, ldc_, 1.0);
+        dim3 grid2((n+31)/32, (k+31)/32);
 
+        setInitialValue<<<grid2, block>>>(n, k ,A_, lda_, 0.0);
+        dim3 grid3((N+31)/32, (K+31)/32);
+        matrixCpy<<<grid3, block>>>(N, K, A, lda, A_, lda_);//lda lda_
         tc_syrk_p3(handle, n, k, alpha, A_, lda_, beta, C_, ldc_, Ah, nb);
-
-        matrixCpy<<<grid, block>>>(N, N, C_, ldc_, C, ldc);
+        dim3 grid4((N+31)/32, (N+31)/32);
+        matrixCpy<<<grid4, block>>>(N, N, C_, ldc_, C, ldc);
 
         printf("check ok\n");
         cudaFree(A_);
