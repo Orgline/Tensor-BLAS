@@ -4,7 +4,7 @@
 
 int64_t* find_mat_size_syrk(int64_t n, int *length) 
 {
-    int64_t powers[] = {8192, 16384, 32768, 65536, 131072, 262144};
+    int64_t powers[] = {8192, 16384, 16384, 16384, 16384, 16384, 16384,16384, 16384, 16384, 16384, 16384};
 
     int64_t* result = (int64_t*) malloc((sizeof(powers) / sizeof(int64_t) + 1) * sizeof(int64_t)+1);
     int result_index = 0;
