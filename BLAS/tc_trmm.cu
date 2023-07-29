@@ -40,12 +40,26 @@ void tc_trmm_p3(cublasHandle_t handle, long int m, long int n, float alpha, floa
 
     __half* Ah = hwork;
     __half* Bh = hwork + m*m;
-    dim3 gridA((m+31)/32, (m+31)/32);
-    dim3 block(32,32);
-    s2h<<<gridA, block>>>(m, m, A, lda, Ah, lda);
+    constexpr auto block_size = 256;
+	constexpr auto smem_len = block_size * 16;
+	auto grid_size = m;
+    s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
+				m, m,
+				A, lda,
+				Ah, lda
+				);
+    grid_size = n;
+    s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
+				m, n,
+				B, ldb,
+				Bh, ldb
+				);
+    // dim3 gridA((m+31)/32, (m+31)/32);
+    // dim3 block(32,32);
+    // s2h<<<gridA, block>>>(m, m, A, lda, Ah, lda);
 
-    dim3 gridB((m+31)/32, (n+31)/32);
-    s2h<<<gridB, block>>>(m, n, B, ldb, Bh, ldb);
+    // dim3 gridB((m+31)/32, (n+31)/32);
+    // s2h<<<gridB, block>>>(m, n, B, ldb, Bh, ldb);
 
 
     for(int i = length; i>=0; i--)
