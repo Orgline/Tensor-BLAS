@@ -48,13 +48,27 @@ void tc_rtrsm_p2(cublasHandle_t handle, long int m, long int n, float* A, long i
     __half *Ah = hwork;
     __half *Bh = hwork+n/2*n/2;
 
-    dim3 grid((n/2+31)/32, (n/2+31)/32);
-    dim3 block(32,32);
-    s2h<<<grid, block>>>(n/2, n/2, A+n/2, lda, Ah, n/2);
+    // dim3 grid((n/2+31)/32, (n/2+31)/32);
+    // dim3 block(32,32);
+    // s2h<<<grid, block>>>(n/2, n/2, A+n/2, lda, Ah, n/2);
 
-    dim3 grid1((m+31)/32, (n/2+31)/32);
-    dim3 block1(32,32);
-    s2h<<<grid1, block1>>>(m, n/2, B, ldb, Bh, m);
+    // dim3 grid1((m+31)/32, (n/2+31)/32);
+    // dim3 block1(32,32);
+    // s2h<<<grid1, block1>>>(m, n/2, B, ldb, Bh, m);
+
+    constexpr auto block_size = 256;
+	constexpr auto smem_len = block_size * 16;
+	auto grid_size = n/2;
+    s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
+				n/2, n/2,
+				A+n/2, lda,
+				Ah, n/2
+				);
+    s2h_swpipe<std::uint64_t, block_size, smem_len><<<grid_size, block_size>>>(
+				m, n/2,
+				B, ldb,
+				Bh, m
+				);
 
     cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, m, n/2, n/2,
         &snegone, Bh, CUDA_R_16F, m, Ah, CUDA_R_16F, n/2,
