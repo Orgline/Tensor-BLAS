@@ -74,8 +74,8 @@ int main(int argc,char *argv[])
             );
         float ms = stopTimer();
         printf("strsm takes %f ms, flops is %f\n", ms, 1.0*m*n*n/ms/1e9);
-        printMatrixDeviceBlock("B.csv", m, n, B, m);
-        printMatrixDeviceBlock("work.csv", m, n, work, m);
+        // printMatrixDeviceBlock("B.csv", m, n, B, m);
+        // printMatrixDeviceBlock("work.csv", m, n, work, m);
         cublasSgeam(cublas_handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n,
                 &sone, B, m, &snegone, work, m,
                 work, m);
