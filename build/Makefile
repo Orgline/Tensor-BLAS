@@ -10,7 +10,7 @@ SOURCES = $(wildcard ../BLAS/*.cu) $(wildcard ../util/*.cu)
 
 OBJECTS = $(SOURCES:.cu=.o)
 
-LIBNAME = TensorBLAS.so
+LIBNAME = libTensorBLAS.so
 
 all: $(LIBNAME)
 
