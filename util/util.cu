@@ -75,7 +75,38 @@ float snorm(long int m, long int n, float *d_A, long int lda)
 
     return float(norm);
 }
+__global__ void frobenius_norm_kernelDouble(int64_t m, int64_t n, double *A, int64_t lda, double *norm) {
+    int64_t idx_x = threadIdx.x + blockDim.x * blockIdx.x;
+    int64_t idx_y = threadIdx.y + blockDim.y * blockIdx.y;
 
+    for (int64_t i = idx_x; i < m; i += blockDim.x * gridDim.x) {
+        for (int64_t j = idx_y; j < n; j += blockDim.y * gridDim.y) {
+            double value = A[i + j * lda];
+            double value_squared = double(value) * (value);
+            atomicAdd(norm, value_squared);
+        }
+    }
+}
+float snormDouble(long int m, long int n, double *d_A, long int lda) 
+{
+    const long int BLOCK_SIZE = 32;
+    dim3 blockDim(BLOCK_SIZE, BLOCK_SIZE);
+    dim3 gridDim((m + BLOCK_SIZE - 1) / BLOCK_SIZE, (n + BLOCK_SIZE - 1) / BLOCK_SIZE);
+
+    double *d_norm;
+    cudaMalloc(&d_norm, sizeof(double));
+    cudaMemset(d_norm, 0, sizeof(double));
+
+    frobenius_norm_kernelDouble<<<gridDim, blockDim>>>(m, n, d_A, lda, d_norm);
+
+    double norm;
+    cudaMemcpy(&norm, d_norm, sizeof(double), cudaMemcpyDeviceToHost);
+    norm = sqrtf(norm);
+
+    cudaFree(d_norm);
+
+    return float(norm);
+}
 __global__
 void transpose(int m, int n, float* dA, float *tmpA){
     int i = threadIdx.x + blockDim.x * blockIdx.x;
@@ -124,7 +155,16 @@ void copy_lower_to_upper(long int n, float *A, long int lda)
             A[i+j*lda] = A[j+i*lda];
 	}
 }
-
+__global__ 
+void copy_lower_to_upperDouble(long int n, double *A, long int lda)
+{
+    long int i = threadIdx.x + blockDim.x * blockIdx.x;
+    long int j = threadIdx.y + blockDim.y * blockIdx.y;
+    if (i < n && j < n) {
+		if(i < j)
+            A[i+j*lda] = A[j+i*lda];
+	}
+}
 void generateNormalMatrix(float *dA,long int m,long int n)
 {
     curandGenerator_t gen;
@@ -134,6 +174,14 @@ void generateNormalMatrix(float *dA,long int m,long int n)
     curandGenerateNormal(gen, dA, m*n, 0, 1);
 }
 
+void generateNormalMatrixDouble(double *dA,long int m,long int n)
+{
+    curandGenerator_t gen;
+    curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_DEFAULT);
+    int seed = rand()%3000;
+	curandSetPseudoRandomGeneratorSeed(gen, seed);
+    curandGenerateNormalDouble(gen, dA, m*n, 0, 1);
+}
 void generateUniformMatrix(float *dA,long int m,long int n)
 {
     curandGenerator_t gen;
@@ -141,6 +189,14 @@ void generateUniformMatrix(float *dA,long int m,long int n)
     int seed = 3000;
 	curandSetPseudoRandomGeneratorSeed(gen, seed);
     curandGenerateUniform(gen,dA,long(m*n));
+}
+void generateUniformMatrixDouble(double *dA,long int m,long int n)
+{
+    curandGenerator_t gen;
+    curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_DEFAULT);
+    int seed = 3000;
+	curandSetPseudoRandomGeneratorSeed(gen, seed);
+    curandGenerateUniformDouble(gen,dA,long(m*n));
 }
 
 // float snorm(long int m,long int n,float* dA)
@@ -190,6 +246,15 @@ void setInitialValue( long int m, long int n, float *a, long int lda, float val)
                 a[i+j*lda] = val;
         }
 }
+__global__
+void setInitialValueDouble( long int m, long int n, double *a, long int lda, double val)
+{
+        long int i = threadIdx.x + blockDim.x * blockIdx.x;
+        long int j = threadIdx.y + blockDim.y * blockIdx.y;
+        if (i < m && j < n) {
+                a[i+j*lda] = val;
+        }
+}
 /*
      B = A 
      if you want to put bigger A to small B, size should be B's size
@@ -204,7 +269,15 @@ void matrixCpy(long int m, long int n, float *a, long int lda, float *b, long in
                 b[i+j*ldb] = a[i+j*lda];
         }
 }
-
+__global__
+void matrixCpyDouble(long int m, long int n, double *a, long int lda, double *b, long int ldb)
+{
+        long int i = threadIdx.x + blockDim.x * blockIdx.x;
+        long int j = threadIdx.y + blockDim.y * blockIdx.y;
+        if (i < m && j < n) {
+                b[i+j*ldb] = a[i+j*lda];
+        }
+}
 __global__
 void clearTri(char uplo, long int m, long int n, float *a, long int lda)
 {
@@ -223,7 +296,24 @@ void clearTri(char uplo, long int m, long int n, float *a, long int lda)
 		}
 	}
 }
-
+__global__
+void clearTriDouble(char uplo, long int m, long int n, double *a, long int lda)
+{
+	long int i = threadIdx.x + blockDim.x * blockIdx.x;
+	long int j = threadIdx.y + blockDim.y * blockIdx.y;
+	if (i<m && j<n) {
+		if (uplo == 'l') {
+			if (i>j) {
+				a[i+j*lda] = 0;
+			}
+        } 
+        else
+        {
+            if (i<j)
+                a[i+j*lda] = 0;
+		}
+	}
+}
 
 void print_env() {
     cudaDeviceProp prop;

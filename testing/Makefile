@@ -5,7 +5,7 @@ LFLAGS=-L $(CUDA_PATH)/lib64 -lcublas -lcublasLt -lcurand -lcudart -lcuda
 LFLAGS+= -L\../cuMpSGEMM/build/ -lcumpsgemm
 CC = gcc
 
-all: env syrk trsm trmm syr2k gemm cumpsgemm_syrk cumpsgemm_syr2k cumpsgemm_trmm cumpsgemm_trsm
+all: env syrk trsm trmm syr2k gemm cumpsgemm_syrk cumpsgemm_syr2k cumpsgemm_trmm cumpsgemm_trsm ozimmu_syrk ozimmu_syr2k ozimmu_trmm ozimmu_trsm
 # all: cumpsgemm_trsm
 util.o: ../util/util.cu
 	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
@@ -118,5 +118,49 @@ testing_gemm: testing_gemm.o util.o
 testing_gemm.o: testing_gemm.cu
 	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
 
+ozimmu_syrk: testing_ozimmu_syrk
+
+testing_ozimmu_syrk: testing_ozimmu_syrk.o tc_ozimmu_syrk.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ 
+
+testing_ozimmu_syrk.o: testing_ozimmu_syrk.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+tc_ozimmu_syrk.o: ../BLAS/tc_ozimmu_syrk.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+ozimmu_syr2k: testing_ozimmu_syr2k
+
+testing_ozimmu_syr2k: testing_ozimmu_syr2k.o tc_ozimmu_syr2k.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ 
+
+testing_ozimmu_syr2k.o: testing_ozimmu_syr2k.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+tc_ozimmu_syr2k.o: ../BLAS/tc_ozimmu_syr2k.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+ozimmu_trmm: testing_ozimmu_trmm
+
+testing_ozimmu_trmm: testing_ozimmu_trmm.o tc_ozimmu_trmm.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ 
+
+testing_ozimmu_trmm.o: testing_ozimmu_trmm.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+tc_ozimmu_trmm.o: ../BLAS/tc_ozimmu_trmm.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+ozimmu_trsm: testing_ozimmu_trsm
+
+testing_ozimmu_trsm: testing_ozimmu_trsm.o tc_ozimmu_trsm.o util.o mat_size.o
+	$(CXX) $(LFLAGS) $^ -o $@ 
+
+testing_ozimmu_trsm.o: testing_ozimmu_trsm.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
+tc_ozimmu_trsm.o: ../BLAS/tc_ozimmu_trsm.cu
+	$(CXX) $(CFLAGS) $(LFLAGS) -c $< -o $@ 
+
 clean:
-	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k testing_gemm testing_cumpsgemm_syr2k testing_cumpsgemm_trsm testing_cumpsgemm_syrk testing_cumpsgemm_trmm
+	rm -f *.o testing_env testing_syrk  testing_trsm testing_trmm testing_syr2k testing_gemm testing_cumpsgemm_syr2k testing_cumpsgemm_trsm testing_cumpsgemm_syrk testing_cumpsgemm_trmm testing_ozimmu_syrk testing_ozimmu_syr2k testing_ozimmu_trmm testing_ozimmu_trsm
