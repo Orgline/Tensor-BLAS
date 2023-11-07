@@ -67,7 +67,7 @@ void generateUniformMatrix(float *dA,long int m, long int n);
 void generateUniformMatrixDouble(double *dA,long int m,long int n);
 
 float snorm(long int m, long int n, float *d_A, long int lda);
-float snormDouble(long int m, long int n, double *d_A, long int lda);
+double snormDouble(long int m, long int n, double *d_A, long int lda);
 size_t free_mem();
 
 
@@ -105,7 +105,33 @@ void printMatrixDeviceBlock(char *filename,int m, int n, T* dA, int lda)
     //printMatrixFloat(filename, m, n, ha, lda);
     free(ha);
 }
+template<typename T>
+void printMatrixDeviceBlockDouble(char *filename,int m, int n, T* dA, int lda)
+{
+    FILE *f = fopen(filename, "w");
+	if (f == NULL) {
+		printf("fault!\n");
+		return;
+	}
+    //printf("Perform printmatrixdevice\n");
+    double *ha;
+    ha = (double*)malloc(sizeof(double));
 
+    for(int i = 0;i<m;i++)
+    {
+        for(int j = 0;j<n;j++)
+        {
+            cudaMemcpy(&ha[0], &dA[i+j*lda], sizeof(double), cudaMemcpyDeviceToHost);
+            fprintf(f, "%lf", ha[0]);
+            if (j == n - 1) fprintf(f, "\n");
+			else fprintf(f, ",");
+        }
+    }
+    fclose(f);
+	//cudaMemcpy(ha, dA, sizeof(float)*m*n, cudaMemcpyDeviceToHost);
+    //printMatrixFloat(filename, m, n, ha, lda);
+    free(ha);
+}
 extern "C" __attribute__((visibility("default"))) void print_env();
 
 extern "C" __attribute__((visibility("default"))) int tc_syrk_wrapper(long int n, long int k, float* A, float* C, long int nb);

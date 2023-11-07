@@ -87,7 +87,7 @@ __global__ void frobenius_norm_kernelDouble(int64_t m, int64_t n, double *A, int
         }
     }
 }
-float snormDouble(long int m, long int n, double *d_A, long int lda) 
+double snormDouble(long int m, long int n, double *d_A, long int lda) 
 {
     const long int BLOCK_SIZE = 32;
     dim3 blockDim(BLOCK_SIZE, BLOCK_SIZE);
@@ -105,7 +105,7 @@ float snormDouble(long int m, long int n, double *d_A, long int lda)
 
     cudaFree(d_norm);
 
-    return float(norm);
+    return norm;
 }
 __global__
 void transpose(int m, int n, float* dA, float *tmpA){

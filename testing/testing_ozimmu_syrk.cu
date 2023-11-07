@@ -25,7 +25,7 @@ int parseArguments(int argc,char *argv[])
 
 
 __global__
-void sSubstract(long int m, long int n, float* dA, long int lda, float* dB, long int ldb)
+void sSubstract(long int m, long int n, double* dA, long int lda, double* dB, long int ldb)
 {
     long int i = (long)threadIdx.x + (long)blockDim.x*  (long)blockIdx.x;
 	long int j =  (long)threadIdx.y +  (long)blockDim.y * (long)blockIdx.y;
@@ -34,12 +34,12 @@ void sSubstract(long int m, long int n, float* dA, long int lda, float* dB, long
 		dA[i+j*ldb] = dA[i+j*lda] - dB[i+j*ldb];
         if(i == 40000 && j %1000 == 0)
         {    __syncthreads();
-            printf("i = %d, j = %d, dA = %f, dB=%f\n",i, j, dA[i+j*lda], dB[i+j*ldb]);
+            printf("i = %d, j = %d, dA = %lf, dB=%lf\n",i, j, dA[i+j*lda], dB[i+j*ldb]);
             __syncthreads();
         }
         if(j == 40000 && i %1000 == 0)
         {    __syncthreads();
-            printf("i = %d, j =%d, second dA = %f, dB=%f\n",i, j, dA[i+j*lda], dB[i+j*ldb]);
+            printf("i = %d, j =%d, second dA = %lf, dB=%lf\n",i, j, dA[i+j*lda], dB[i+j*ldb]);
             __syncthreads();
         }
     }
@@ -124,10 +124,10 @@ int main(int argc,char *argv[])
         );
 
     
-        //printMatrixDeviceBlock("C_p.csv", n, n, tC, n);
+        printMatrixDeviceBlockDouble("C_p.csv", n, 1, C, n);
         copy_lower_to_upperDouble<<<gridc, blockc>>>(n, tC, n);
         //printf("snorm tC = %f\n", snorm(n, n, tC, n));
-        //printMatrixDeviceBlock("C_a.csv", n, n, tC, n);
+        printMatrixDeviceBlockDouble("C_a.csv", n, 1, tC, n);
         
         double sonedouble = 1.0, snegonedobule = -1.0;
         cublasDgeam(cublas_handle, CUBLAS_OP_N, CUBLAS_OP_N, n, n,
