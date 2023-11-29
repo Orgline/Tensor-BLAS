@@ -31,11 +31,12 @@ void tc_ozimmu_trsm_p2(cublasHandle_t handle, long int m, long int n, double* A,
     //     ozimmu_FP16TCEC
     //     );
     double sonedouble = 1.0, snegonedobule = -1.0;
-    cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, m, n/2, n/2,
-        &snegonedobule, B, CUDA_R_64F, m, A+n/2, CUDA_R_64F, n/2,
+    auto info = cublasGemmEx(handle, CUBLAS_OP_N, CUBLAS_OP_T, m, n/2, n/2,
+        &snegonedobule, B, CUDA_R_64F, ldb, A+n/2, CUDA_R_64F, lda,
         &sonedouble, B+n/2*ldb, CUDA_R_64F, ldb, CUDA_R_64F,
-        CUBLAS_GEMM_DEFAULT_TENSOR_OP
+        CUBLAS_GEMM_DEFAULT
     );
+    // printf("info = %d\n", info);
     tc_ozimmu_trsm_p2(handle, m, n/2, A+n/2*lda+n/2, lda, B+n/2*ldb, ldb, nb);
 }
  
