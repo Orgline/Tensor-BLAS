@@ -1,0 +1,24 @@
+./testing_ozimmu_trsm 512 512 256 1 0 0
+tc_ozimmu_trsm takes 0.944128 ms, flops is 0.142161
+Dtrsm takes 0.752640 ms, flops is 0.178329
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 0.000000e+00
+./testing_ozimmu_trsm 1024 1024 256 1 0 0
+tc_ozimmu_trsm takes 3.601408 ms, flops is 0.298145
+Dtrsm takes 3.418112 ms, flops is 0.314133
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 0.000000e+00
+./testing_ozimmu_trsm 2048 2048 256 1 0 0
+tc_ozimmu_trsm takes 13.674496 ms, flops is 0.628172
+Dtrsm takes 21.160896 ms, flops is 0.405934
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 5.674996e-01
+./testing_ozimmu_trsm 4096 4096 256 1 0 0
+tc_ozimmu_trsm takes 90.118141 ms, flops is 0.762549
+Dtrsm takes 141.286362 ms, flops is 0.486384
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 7.071229e-01
+./testing_ozimmu_trsm 8192 8192 256 1 0 0
+tc_ozimmu_trsm takes 274.370575 ms, flops is 2.003698
+Dtrsm takes 1049.410522 ms, flops is 0.523871
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 4.787963e-01
+./testing_ozimmu_trsm 16384 16384 256 1 0 0
+tc_ozimmu_trsm takes 1861.552124 ms, flops is 2.362570
+Dtrsm takes 8146.834473 ms, flops is 0.539847
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 7.398034e-01

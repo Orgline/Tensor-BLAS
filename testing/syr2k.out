@@ -1,0 +1,86 @@
+./testing_syr2k 4000 4000 256 1 0 0
+Two tc_gemm 4000x4000 takes 1.174528 ms, flops is 108.979947
+tc_syr2k 4000x4000 takes 1.263616 ms, flops is 101.296599
+./testing_syr2k 8000 8000 256 1 0 0
+Two tc_gemm 8000x8000 takes 7.924736 ms, flops is 129.215661
+tc_syr2k 8000x8000 takes 8.528896 ms, flops is 120.062428
+./testing_syr2k 12000 12000 256 1 0 0
+Two tc_gemm 12000x12000 takes 25.782272 ms, flops is 134.045594
+tc_syr2k 12000x12000 takes 17.412096 ms, flops is 198.482710
+./testing_syr2k 16000 16000 256 1 0 0
+Two tc_gemm 16000x16000 takes 67.488770 ms, flops is 121.383158
+tc_syr2k 16000x16000 takes 61.044735 ms, flops is 134.196668
+./testing_syr2k 20000 20000 256 1 0 0
+Two tc_gemm 20000x20000 takes 142.325760 ms, flops is 112.418160
+tc_syr2k 20000x20000 takes 84.167679 ms, flops is 190.096724
+./testing_syr2k 24000 24000 256 1 0 0
+Two tc_gemm 24000x24000 takes 295.052277 ms, flops is 93.705428
+tc_syr2k 24000x24000 takes 142.297089 ms, flops is 194.297721
+./testing_syr2k 28000 28000 256 1 0 0
+Two tc_gemm 28000x28000 takes 489.280518 ms, flops is 89.731756
+tc_syr2k 28000x28000 takes 219.909119 ms, flops is 199.646110
+./testing_syr2k 32000 32000 256 1 0 0
+Two tc_gemm 32000x32000 takes 690.569214 ms, flops is 94.901421
+tc_syr2k 32000x32000 takes 342.876160 ms, flops is 191.136065
+./testing_syr2k 36000 36000 256 1 0 0
+Two tc_gemm 36000x36000 takes 1007.794189 ms, flops is 92.590333
+tc_syr2k 36000x36000 takes 511.382538 ms, flops is 182.470055
+./testing_syr2k 40000 40000 256 1 0 0
+Two tc_gemm 40000x40000 takes 1389.283325 ms, flops is 92.133835
+tc_syr2k 40000x40000 takes 695.817200 ms, flops is 183.956361
+./testing_syr2k 4000 48000 256 1 0 0
+Two tc_gemm 4000x48000 takes 13.105152 ms, flops is 117.205812
+tc_syr2k 4000x48000 takes 13.993984 ms, flops is 109.761450
+./testing_syr2k 8000 56000 256 1 0 0
+Two tc_gemm 8000x56000 takes 54.310913 ms, flops is 131.980841
+tc_syr2k 8000x56000 takes 64.601089 ms, flops is 110.957881
+./testing_syr2k 12000 64000 256 1 0 0
+Two tc_gemm 12000x64000 takes 186.679291 ms, flops is 98.736180
+tc_syr2k 12000x64000 takes 113.387520 ms, flops is 162.557573
+./testing_syr2k 16000 72000 256 1 0 0
+Two tc_gemm 16000x72000 takes 367.803406 ms, flops is 100.227457
+tc_syr2k 16000x72000 takes 247.567368 ms, flops is 148.904924
+./testing_syr2k 20000 80000 256 1 0 0
+Two tc_gemm 20000x80000 takes 593.875977 ms, flops is 107.766609
+tc_syr2k 20000x80000 takes 385.661957 ms, flops is 165.948440
+./testing_syr2k 24000 88000 256 1 0 0
+Two tc_gemm 24000x88000 takes 952.275940 ms, flops is 106.456538
+tc_syr2k 24000x88000 takes 599.646179 ms, flops is 169.059695
+./testing_syr2k 28000 96000 256 1 0 0
+Two tc_gemm 28000x96000 takes 1422.812134 ms, flops is 105.796118
+tc_syr2k 28000x96000 takes 856.240112 ms, flops is 175.801154
+./testing_syr2k 32000 104000 256 1 0 0
+Two tc_gemm 32000x104000 takes 1962.140625 ms, flops is 108.550833
+tc_syr2k 32000x104000 takes 1220.754395 ms, flops is 174.475718
+./testing_syr2k 36000 112000 256 1 0 0
+Two tc_gemm 36000x112000 takes 2917.593994 ms, flops is 99.501165
+tc_syr2k 36000x112000 takes 1977.592773 ms, flops is 146.796653
+./testing_syr2k 40000 120000 256 1 0 0
+Two tc_gemm 40000x120000 takes 3725.971436 ms, flops is 103.060371
+tc_syr2k 40000x120000 takes 2341.417969 ms, flops is 164.003183
+./testing_syr2k 44000 44000 256 1 0 0
+Two tc_gemm 44000x44000 takes 1839.283203 ms, flops is 92.627389
+tc_syr2k 44000x44000 takes 924.336121 ms, flops is 184.313905
+./testing_syr2k 48000 48000 256 1 0 0
+Two tc_gemm 48000x48000 takes 2317.966309 ms, flops is 95.421577
+tc_syr2k 48000x48000 takes 1183.950806 ms, flops is 186.818573
+./testing_syr2k 52000 52000 256 1 0 0
+Two tc_gemm 52000x52000 takes 3033.987061 ms, flops is 92.688596
+tc_syr2k 52000x52000 takes 1583.004639 ms, flops is 177.646984
+./testing_syr2k 56000 56000 256 1 0 0
+Two tc_gemm 56000x56000 takes 3782.243408 ms, flops is 92.863405
+tc_syr2k 56000x56000 takes 1828.973511 ms, flops is 192.037773
+./testing_syr2k 60000 60000 256 1 0 0
+Two tc_gemm 60000x60000 takes 4694.197266 ms, flops is 92.028514
+tc_syr2k 60000x60000 takes 2388.144043 ms, flops is 180.893611
+./testing_syr2k 64000 64000 256 1 0 0
+Two tc_gemm 64000x64000 takes 4799.372070 ms, flops is 109.240957
+tc_syr2k 64000x64000 takes 2870.398926 ms, flops is 182.653357
+./testing_syr2k 68000 68000 256 1 0 0
+Two tc_gemm 68000x68000 takes 5886.006348 ms, flops is 106.840524
+tc_syr2k 68000x68000 takes 4214.397949 ms, flops is 149.217992
+./testing_syr2k 72000 72000 256 1 0 0
+Two tc_gemm 72000x72000 takes 6851.994629 ms, flops is 108.945795
+tc_syr2k 72000x72000 takes 4362.171387 ms, flops is 171.129452
+./testing_syr2k 76000 76000 256 1 0 0
+./testing_syr2k 80000 80000 256 1 0 0

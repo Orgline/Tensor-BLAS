@@ -1,0 +1,18 @@
+./testing_ozimmu_syrk 512 512 256 1 0 0
+tc_gemm 512x512 takes 0.686080 ms, flops is 0.195630
+tc_ozIMMU_syrk 512x512 takes 0.734208 ms, flops is 0.182806
+./testing_ozimmu_syrk 1024 1024 256 1 0 0
+tc_gemm 1024x1024 takes 0.510976 ms, flops is 2.101355
+tc_ozIMMU_syrk 1024x1024 takes 5.404672 ms, flops is 0.198669
+./testing_ozimmu_syrk 2048 2048 256 1 0 0
+tc_gemm 2048x2048 takes 2.105344 ms, flops is 4.080062
+tc_ozIMMU_syrk 2048x2048 takes 20.627457 ms, flops is 0.416432
+./testing_ozimmu_syrk 4096 4096 256 1 0 0
+tc_gemm 4096x4096 takes 11.208704 ms, flops is 6.130903
+tc_ozIMMU_syrk 4096x4096 takes 89.356285 ms, flops is 0.769050
+./testing_ozimmu_syrk 8192 8192 256 1 0 0
+tc_gemm 8192x8192 takes 56.043713 ms, flops is 9.809411
+tc_ozIMMU_syrk 8192x8192 takes 486.648834 ms, flops is 1.129677
+./testing_ozimmu_syrk 16384 16384 256 1 0 0
+tc_gemm 16384x16384 takes 349.367310 ms, flops is 12.588603
+tc_ozIMMU_syrk 16384x16384 takes 2702.429199 ms, flops is 1.627442

@@ -1,0 +1,93 @@
+./testing_trsm 4000 4000 256 1 0
+rtrsm takes 86.582275 ms, flops is 0.739181
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.001368e-04
+./testing_trsm 8000 8000 256 1 0
+rtrsm takes 10.788864 ms, flops is 47.456340
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.049087e-04
+./testing_trsm 12000 12000 256 1 0
+rtrsm takes 23.131136 ms, flops is 74.704502
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.050871e-04
+./testing_trsm 16000 16000 256 1 0
+rtrsm takes 43.995136 ms, flops is 93.101200
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.060934e-04
+./testing_trsm 20000 20000 256 1 0
+rtrsm takes 75.890686 ms, flops is 105.414780
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.062893e-04
+./testing_trsm 24000 24000 256 1 0
+rtrsm takes 114.582527 ms, flops is 120.646667
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.065286e-04
+./testing_trsm 28000 28000 256 1 0
+rtrsm takes 177.117188 ms, flops is 123.940541
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.066338e-04
+./testing_trsm 32000 32000 256 1 0
+rtrsm takes 245.912582 ms, flops is 133.250603
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.067328e-04
+./testing_trsm 36000 36000 256 1 0
+rtrsm takes 344.919037 ms, flops is 135.266526
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.069684e-04
+./testing_trsm 40000 40000 256 1 0
+rtrsm takes 453.270538 ms, flops is 141.196029
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.068700e-04
+./testing_trsm 4000 48000 256 1 0
+rtrsm takes 76.943359 ms, flops is 119.776418
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.070630e-04
+./testing_trsm 8000 56000 256 1 0
+rtrsm takes 172.528641 ms, flops is 145.413538
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.073904e-04
+./testing_trsm 12000 64000 256 1 0
+rtrsm takes 310.180878 ms, flops is 158.462380
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.070696e-04
+./testing_trsm 16000 72000 256 1 0
+rtrsm takes 545.335266 ms, flops is 152.097260
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.072861e-04
+./testing_trsm 20000 80000 256 1 0
+rtrsm takes 814.922729 ms, flops is 157.070107
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.073836e-04
+./testing_trsm 24000 88000 256 1 0
+rtrsm takes 1129.918457 ms, flops is 164.486206
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.073747e-04
+./testing_trsm 28000 96000 256 1 0
+rtrsm takes 1546.019897 ms, flops is 166.911177
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.074212e-04
+./testing_trsm 32000 104000 256 1 0
+rtrsm takes 2119.839844 ms, flops is 163.272712
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.073618e-04
+./testing_trsm 36000 112000 256 1 0
+rtrsm takes 2701.278320 ms, flops is 167.174184
+Forward error ||X_tc-X_cublas||/||X_cublas|| is -nan
+Kernel launch error: an illegal memory access was encountered
+./testing_trsm 40000 120000 256 1 0
+rtrsm takes 0.000000 ms, flops is inf
+Forward error ||X_tc-X_cublas||/||X_cublas|| is -nan
+Kernel launch error: an illegal memory access was encountered
+./testing_trsm 44000 44000 256 1 0
+rtrsm takes 585.795593 ms, flops is 145.415911
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.070662e-04
+./testing_trsm 48000 48000 256 1 0
+rtrsm takes 729.717773 ms, flops is 151.554483
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.069996e-04
+./testing_trsm 52000 52000 256 1 0
+rtrsm takes 915.655701 ms, flops is 153.559902
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.070826e-04
+./testing_trsm 56000 56000 256 1 0
+rtrsm takes 1116.818481 ms, flops is 157.246681
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.071751e-04
+./testing_trsm 60000 60000 256 1 0
+rtrsm takes 1337.644043 ms, flops is 161.477937
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.071573e-04
+./testing_trsm 64000 64000 256 1 0
+rtrsm takes 1598.083130 ms, flops is 164.036523
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.072483e-04
+./testing_trsm 68000 68000 256 1 0
+rtrsm takes 2026.302490 ms, flops is 155.175252
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.072390e-04
+./testing_trsm 72000 72000 256 1 0
+rtrsm takes 2365.132812 ms, flops is 157.812702
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.072479e-04
+./testing_trsm 76000 76000 256 1 0
+rtrsm takes 2715.410400 ms, flops is 161.661014
+Forward error ||X_tc-X_cublas||/||X_cublas|| is 2.072913e-04
+./testing_trsm 80000 80000 256 1 0
+rtrsm takes 3119.006836 ms, flops is 164.154818
+Forward error ||X_tc-X_cublas||/||X_cublas|| is -nan
+Kernel launch error: an illegal memory access was encountered

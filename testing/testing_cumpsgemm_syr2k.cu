@@ -112,7 +112,7 @@ int main(int argc,char *argv[])
             tC, n
         );
         ms = stopTimer();
-        printf("Ssyr2k %dx%d takes %f ms, flops is %f\n", n, k, ms, 2.0*n*n*k/ms/1e9);
+        printf("Dsyr2k %dx%d takes %f ms, flops is %f\n", n, k, ms, 2.0*n*n*k/ms/1e9);
     
         //printMatrixDeviceBlock("C_p.csv", n, n, tC, n);
         copy_lower_to_upper<<<gridc, blockc>>>(n, tC, n);

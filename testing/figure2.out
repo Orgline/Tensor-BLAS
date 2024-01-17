@@ -1,0 +1,72 @@
+./figure1 65536 65536 32
+tc_gemm and s2h_swpipe, 65536x65536x32 takes 10.049536 ms, flops is 27.352299
+cumpsgemm, 65536x65536x32 takes 15.692800 ms, flops is 17.516180
+Sgemm, 65536x65536x32 takes 17.192961 ms, flops is 15.987817
+
+
+./figure1 65536 65536 64
+tc_gemm and s2h_swpipe, 65536x65536x64 takes 11.638784 ms, flops is 47.234814
+cumpsgemm, 65536x65536x64 takes 23.844864 ms, flops is 23.055523
+Sgemm, 65536x65536x64 takes 30.157824 ms, flops is 18.229293
+
+
+./figure1 65536 65536 128
+tc_gemm and s2h_swpipe, 65536x65536x128 takes 12.750848 ms, flops is 86.230472
+cumpsgemm, 65536x65536x128 takes 39.840767 ms, flops is 27.597652
+Sgemm, 65536x65536x128 takes 58.740734 ms, flops is 18.718044
+
+
+./figure1 65536 65536 256
+tc_gemm and s2h_swpipe, 65536x65536x256 takes 14.169088 ms, flops is 155.198641
+cumpsgemm, 65536x65536x256 takes 64.721916 ms, flops is 33.976486
+Sgemm, 65536x65536x256 takes 115.757057 ms, flops is 18.996883
+
+
+./figure1 65536 65536 512
+tc_gemm and s2h_swpipe, 65536x65536x512 takes 18.357248 ms, flops is 239.580924
+cumpsgemm, 65536x65536x512 takes 114.989059 ms, flops is 38.247521
+Sgemm, 65536x65536x512 takes 240.735229 ms, flops is 18.269227
+
+
+./figure1 65536 65536 1024
+tc_gemm and s2h_swpipe, 65536x65536x1024 takes 51.758080 ms, flops is 169.946279
+cumpsgemm, 65536x65536x1024 takes 228.888580 ms, flops is 38.429584
+Sgemm, 65536x65536x1024 takes 463.052795 ms, flops is 18.995875
+
+
+./figure1 65536 65536 2048
+tc_gemm and s2h_swpipe, 65536x65536x2048 takes 79.405060 ms, flops is 221.549938
+cumpsgemm, 65536x65536x2048 takes 452.207611 ms, flops is 38.902897
+Sgemm, 65536x65536x2048 takes 920.213501 ms, flops is 19.117505
+
+
+./figure1 65536 65536 4096
+tc_gemm and s2h_swpipe, 65536x65536x4096 takes 142.774277 ms, flops is 246.433552
+cumpsgemm, 65536x65536x4096 takes 903.018494 ms, flops is 38.963069
+Sgemm, 65536x65536x4096 takes 1842.573364 ms, flops is 19.095235
+
+
+./figure1 65536 65536 8192
+tc_gemm and s2h_swpipe, 65536x65536x8192 takes 285.831177 ms, flops is 246.189884
+cumpsgemm, 65536x65536x8192 takes 1812.639771 ms, flops is 38.821141
+Sgemm, 65536x65536x8192 takes 3668.790283 ms, flops is 19.180367
+
+
+./figure1 65536 65536 16384
+tc_gemm and s2h_swpipe, 65536x65536x16384 takes 601.749512 ms, flops is 233.880519
+cumpsgemm, 65536x65536x16384 takes 3626.824707 ms, flops is 38.804602
+Sgemm, 65536x65536x16384 takes 7326.745605 ms, flops is 19.208731
+
+
+./figure1 65536 65536 32768
+tc_gemm and s2h_swpipe, 65536x65536x32768 takes 1487.753174 ms, flops is 189.194674
+cumpsgemm, 65536x65536x32768 takes 7317.559082 ms, flops is 38.465692
+Sgemm, 65536x65536x32768 takes 15873.421875 ms, flops is 17.732470
+
+
+./figure1 65536 65536 65536
+tc_gemm and s2h_swpipe, 65536x65536x65536 takes 2583.120850 ms, flops is 217.934036
+cumpsgemm, 65536x65536x65536 takes 14709.451172 ms, flops is 38.271309
+Sgemm, 65536x65536x65536 takes 31656.476562 ms, flops is 17.783089
+
+

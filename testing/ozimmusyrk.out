@@ -1,0 +1,45 @@
+./testing_ozimmu_syrk 256 1 0 0
+Needs m, n and nb, alpha, beta, check as inputs
+./testing_ozimmu_syrk 0 0 256 1 0 0
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+tc_gemm 0x0 takes 0.007168 ms, flops is 0.000000
+tc_ozIMMU_syrk 0x0 takes 0.008096 ms, flops is 0.000000
+./testing_ozimmu_syrk 0 0 256 1 0 0
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+tc_gemm 0x0 takes 0.007360 ms, flops is 0.000000
+tc_ozIMMU_syrk 0x0 takes 0.005120 ms, flops is 0.000000
+./testing_ozimmu_syrk 0 0 256 1 0 0
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+tc_gemm 0x0 takes 0.007168 ms, flops is 0.000000
+tc_ozIMMU_syrk 0x0 takes 0.006080 ms, flops is 0.000000
+./testing_ozimmu_syrk 0 0 256 1 0 0
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+tc_gemm 0x0 takes 0.006368 ms, flops is 0.000000
+tc_ozIMMU_syrk 0x0 takes 0.006176 ms, flops is 0.000000
+./testing_ozimmu_syrk 0 0 256 1 0 0
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+ ** On entry to GEMM_EX  parameter number 9 had an illegal value
+tc_gemm 0x0 takes 0.007168 ms, flops is 0.000000
+tc_ozIMMU_syrk 0x0 takes 0.006144 ms, flops is 0.000000
+./testing_ozimmu_syrk 512 512 256 1 0 0
+tc_gemm 512x512 takes 0.686080 ms, flops is 0.195630
+tc_ozIMMU_syrk 512x512 takes 0.754496 ms, flops is 0.177891
+./testing_ozimmu_syrk 1024 1024 256 1 0 0
+tc_gemm 1024x1024 takes 0.533504 ms, flops is 2.012622
+tc_ozIMMU_syrk 1024x1024 takes 0.848896 ms, flops is 1.264868
+./testing_ozimmu_syrk 2048 2048 256 1 0 0
+tc_gemm 2048x2048 takes 2.103296 ms, flops is 4.084035
+tc_ozIMMU_syrk 2048x2048 takes 3.101696 ms, flops is 2.769431
+./testing_ozimmu_syrk 4096 4096 256 1 0 0
+tc_gemm 4096x4096 takes 11.030528 ms, flops is 6.229935
+tc_ozIMMU_syrk 4096x4096 takes 12.391424 ms, flops is 5.545729
+./testing_ozimmu_syrk 8192 8192 256 1 0 0
+tc_gemm 8192x8192 takes 57.089024 ms, flops is 9.629799
+tc_ozIMMU_syrk 8192x8192 takes 236.943359 ms, flops is 2.320199
+./testing_ozimmu_syrk 16384 16384 256 1 0 0
+tc_gemm 16384x16384 takes 343.294983 ms, flops is 12.811275
+tc_ozIMMU_syrk 16384x16384 takes 1022.122009 ms, flops is 4.302859
